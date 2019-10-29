@@ -1,0 +1,23 @@
+{
+  "name": "gulagbot",
+  "version": "0.0.1",
+  "description": "GulagBot",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emil1003/GulagBot.git"
+  },
+  "author": "Henning Emil Bøjer Bach",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/emil1003/GulagBot/issues"
+  },
+  "homepage": "https://github.com/emil1003/GulagBot",
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "node-opus": "^0.3.3"
+  }
+}
