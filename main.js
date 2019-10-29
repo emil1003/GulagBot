@@ -33,6 +33,10 @@ client.on("ready", () => {
 	}
 });
 
+client.on("rateLimit", info => {
+	console.log("rateLimit");
+});
+
 client.on("message", message => {
 	if (!message.author.bot) {
 
@@ -46,7 +50,7 @@ client.on("message", message => {
 		
 		switch (message.content.toLowerCase().split(" ")[0]) {
 			case "!radio":
-				console.log("Radio triggered by " + message.author.username);
+				console.log(`Radio triggered by ${message.author.nickname || message.author.username}`);
 				radioChannel = CEGuild.channels.find(val => val.name === "Soviet Radio");
 				radioChannel.join()
 					.then(connection => {
@@ -59,7 +63,7 @@ client.on("message", message => {
 				break;
 			case "!quit":
 				//Stop playing
-				console.log(`Quit triggered by ${message.author.username}`);
+				console.log(`Quit triggered by ${message.author.nickname || message.author.username}`);
 				console.log("Leaving radio channel");
 				(dispatcher != null) && dispatcher.end();
 				radioChannel.leave();
@@ -73,12 +77,18 @@ client.on("message", message => {
 				
 				var toGulag = message.mentions.members.first();
 				if (toGulag.user.id == message.author.id) {
-					message.channel.send(`HEY EVERYONE! ${message.author.username} IS AN IDIOT!`);
+					message.channel.send(`HEY EVERYONE! ${message.author.nickname || message.author.username} IS AN IDIOT!`);
+					break;
 				} else {
-					toGulag.addRole("638310306182987779")
-							.catch(console.error);
-					message.channel.send(`${toGulag.user.username} IS GOING TO THE GULAG!`);
+					if (toGulag.hasPermission(Discord.Permissions.FLAGS.ADMINISTRATOR)) {
+						message.channel.send(`YOU CANNOT SEND A SUPERIOR TO THE GULAG, ${message.author.nickname || message.author.username}!`);
+						break;
+					}
 				}
+
+				toGulag.setRoles(["638310306182987779"])
+						.catch(console.error);
+				message.channel.send(`${toGulag.user.nickname || toGulag.user.username} IS GOING TO THE GULAG!`);
 				break;
 			case "!pardon":
 				if (message.mentions.everyone) {
@@ -88,12 +98,15 @@ client.on("message", message => {
 
 				var toPardon = message.mentions.members.first();
 				if (toPardon.user.id == message.author.id) {
-					message.channel.send("NICE TRY CAPITALIST PIG!");
-				} else {
-					toPardon.removeRole("638310306182987779")
-						.catch(console.error);
-					message.channel.send(`${toPardon.user.username} IS A FRIEND OF THE SOVIET UNION AGAIN!`);
+					if (!message.member.hasPermission(Discord.Permissions.FLAGS.ADMINISTRATOR)) {
+						message.channel.send("NICE TRY CAPITALIST PIG!");
+						break;
+					}
 				}
+
+				toPardon.setRoles(["638666668830228480"])
+					.catch(console.error);
+				message.channel.send(`${toPardon.user.nickname || toPardon.user.username} IS A FRIEND OF THE SOVIET UNION AGAIN!`);
 				break;
 		}
 	}
