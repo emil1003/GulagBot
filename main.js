@@ -31,7 +31,7 @@ client.on("ready", () => {
 	} else {
 		return;
 	}
-})
+});
 
 client.on("message", message => {
 	if (!message.author.bot) {
