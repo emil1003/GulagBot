@@ -20,6 +20,9 @@ client.on("ready", () => {
 	console.log("Event: ready");
 
 	console.log(`I am ${client.user.tag}`);
+
+	if (settings.presence)
+		client.user.setPresence(settings.presence);
 	
 	CEGuild = client.guilds.get("575052713239511080");
 	
