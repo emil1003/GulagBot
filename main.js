@@ -16,6 +16,9 @@ let radioChannel = null;
 let radioStream = null;
 let dispatcher = null;
 
+let gulagRole = null;
+let farmerRole = null;
+
 client.on("ready", () => {
 	console.log("Event: ready");
 
@@ -31,6 +34,10 @@ client.on("ready", () => {
 	} else {
 		return;
 	}
+
+	//Load roles
+	gulagRole = CEGuild.roles.find(val => val.name === "Gulag");
+	farmerRole = CEGuild.roles.find(val => val.name === "Farmers");
 });
 
 client.on("rateLimit", info => {
@@ -86,7 +93,7 @@ client.on("message", message => {
 					}
 				}
 
-				toGulag.setRoles(["638310306182987779"])
+				toGulag.setRoles([gulagRole])
 						.catch(console.error);
 				message.channel.send(`${toGulag.user.nickname || toGulag.user.username} IS GOING TO THE GULAG!`);
 				break;
@@ -104,7 +111,7 @@ client.on("message", message => {
 					}
 				}
 
-				toPardon.setRoles(["638666668830228480"])
+				toPardon.setRoles([farmerRole])
 					.catch(console.error);
 				message.channel.send(`${toPardon.user.nickname || toPardon.user.username} IS A FRIEND OF THE SOVIET UNION AGAIN!`);
 				break;
