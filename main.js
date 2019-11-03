@@ -26,14 +26,16 @@ client.on("ready", () => {
 
 	if (settings.presence)
 		client.user.setPresence(settings.presence);
-	
-	CEGuild = client.guilds.get("575052713239511080");
-	
+
+	CEGuild = client.guilds.find(val => val.name === "Communism Enthusiasts");
+
 	if (CEGuild.available) {
 		console.log(`${CEGuild.name} (${CEGuild.id}) connected`);
 	} else {
 		return;
 	}
+
+	radioChannel = CEGuild.channels.find(val => val.name === "Soviet Radio");
 
 	//Load roles
 	gulagRole = CEGuild.roles.find(val => val.name === "Gulag");
@@ -41,30 +43,33 @@ client.on("ready", () => {
 });
 
 client.on("rateLimit", info => {
-	console.log("rateLimit");
+	console.log("Event: rateLimit");
 });
 
 client.on("message", message => {
+	console.log("Event: message");
 	if (!message.author.bot) {
 
 		if (message.guild == null || message.guild.id != CEGuild.id) {
 			//I am somewhere where I shouldn't be
-			message.channel.send("where am i? (I should be in Communist Enthusiasts)");
-			console.log(`WARN: Bot outside of Communist Enthusiasts!
+			message.channel.send("where am i? (I should be in Communism Enthusiasts)");
+			console.log(`WARN: Bot outside of Communism Enthusiasts!
 	${message.author.tag} contacted bot in DMs`);
 			return;
 		}
-		
+
 		switch (message.content.toLowerCase().split(" ")[0]) {
 			case "!radio":
 				console.log(`Radio triggered by ${message.author.nickname || message.author.username}`);
-				radioChannel = CEGuild.channels.find(val => val.name === "Soviet Radio");
 				radioChannel.join()
 					.then(connection => {
 						radioStream = connection;
 						console.log("Joined radio channel");
-						dispatcher = connection.playFile("/home/henning/Musik/National Anthem of the soviet union - Red Army Choir-BulFwGSi8bc.mp3");
-						
+						dispatcher = connection.playFile(settings.ussrAnthemPath);
+						var embed = new Discord.RichEmbed()
+								.setTitle("SOVIET RADIO IS NOW OPEN!")
+								.setDescription("COME AND LISTEN! (OR GO TO THE GULAG)");
+						message.channel.send(embed);
 					});
 				message.delete();
 				break;
@@ -81,8 +86,12 @@ client.on("message", message => {
 					message.channel.send("YOU CANNOT SEND THEM TO THE GULAG!");
 					break;
 				}
-				
+
 				var toGulag = message.mentions.members.first();
+
+				if (toGulag == null)
+					break;
+
 				if (toGulag.user.id == message.author.id) {
 					message.channel.send(`HEY EVERYONE! ${message.author.nickname || message.author.username} IS AN IDIOT!`);
 					break;
@@ -104,6 +113,10 @@ client.on("message", message => {
 				}
 
 				var toPardon = message.mentions.members.first();
+
+				if (toGulag == null)
+					break;
+
 				if (toPardon.user.id == message.author.id) {
 					if (!message.member.hasPermission(Discord.Permissions.FLAGS.ADMINISTRATOR)) {
 						message.channel.send("NICE TRY CAPITALIST PIG!");
