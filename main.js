@@ -137,6 +137,9 @@ client.on("message", message => {
 					.catch(console.error);
 				message.channel.send(`${toPardon.user.nickname || toPardon.user.username} IS A FRIEND OF THE SOVIET UNION AGAIN!`);
 				break;
+			case "!food":
+				message.channel.send(`YOU HAVE ALREADY EXCEEDED YOUR MONTHLY ALLOWANCE, ${message.author.nickname || message.author.username}!`);
+				break;
 		}
 	}
 })
