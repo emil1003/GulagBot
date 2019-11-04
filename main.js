@@ -123,7 +123,7 @@ client.on("message", message => {
 
 				var toPardon = message.mentions.members.first();
 
-				if (toGulag == null)
+				if (toPardon == null)
 					break;
 
 				if (toPardon.user.id == message.author.id) {
