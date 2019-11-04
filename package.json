@@ -4,7 +4,9 @@
   "description": "GulagBot",
   "main": "main.js",
   "scripts": {
-    "test": "node -c main.js"
+    "test": "node -c main.js",
+    "start": "nohup node main.js > log.txt 2>&1 & echo $! > pid.txt",
+    "stop": "kill $(tail pid.txt)"
   },
   "repository": {
     "type": "git",
