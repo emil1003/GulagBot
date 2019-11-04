@@ -116,26 +116,32 @@ client.on("message", message => {
 				message.channel.send(`${toGulag.user.nickname || toGulag.user.username} IS GOING TO THE GULAG!`);
 				break;
 			case "!pardon":
-				if (message.mentions.everyone) {
-					message.channel.send("YOU CANNOT PARDON THEM!");
-					break;
-				}
+				if (message.member.hasPermission(Discord.Permissions.FLAGS.ADMINISTRATOR)) {
+					if (message.mentions.everyone) {
+							//Pardon all
+							
+							CEGuild.members.every(member => {
+								if (member.roles.find(val => val.name === gulagRole.name) != null) {
+									member.setRoles([farmerRole]);
+								}
+								return true;
+						});
 
-				var toPardon = message.mentions.members.first();
-
-				if (toPardon == null)
-					break;
-
-				if (toPardon.user.id == message.author.id) {
-					if (!message.member.hasPermission(Discord.Permissions.FLAGS.ADMINISTRATOR)) {
-						message.channel.send("NICE TRY CAPITALIST PIG!");
+						message.channel.send("YOU GET A PARDON, YOU GET A PARDON, EVERYONE GETS A PARDON!");
 						break;
-					}
-				}
+					} else {
+						var toPardon = message.mentions.members.first();
 
-				toPardon.setRoles([farmerRole])
-					.catch(console.error);
-				message.channel.send(`${toPardon.user.nickname || toPardon.user.username} IS A FRIEND OF THE SOVIET UNION AGAIN!`);
+						if (toPardon == null)
+							break;
+
+						toPardon.setRoles([farmerRole])
+							.catch(console.error);
+						message.channel.send(`${toPardon.user.nickname || toPardon.user.username} IS A FRIEND OF THE SOVIET UNION AGAIN!`);
+					}
+				} else {
+					message.channel.send("NICE TRY CAPITALIST PIG!");
+				}
 				break;
 			case "!food":
 				message.channel.send(`YOU HAVE ALREADY EXCEEDED YOUR MONTHLY ALLOWANCE, ${message.author.nickname || message.author.username}!`);
