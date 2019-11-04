@@ -67,7 +67,7 @@ client.on("message", message => {
 						console.log("Joined radio channel");
 
 						if (settings.ussrAnthemPath.startsWith("http://") || settings.ussrAnthemPath.startsWith("https://")) {
-							dispatcher = connection.playArbitraryInput(settings.ussrAnthem);
+							dispatcher = connection.playArbitraryInput(settings.ussrAnthemPath);
 						} else {
 							dispatcher = connection.playFile(settings.ussrAnthemPath);
 						}
@@ -75,7 +75,10 @@ client.on("message", message => {
 						var embed = new Discord.RichEmbed()
 								.setTitle("SOVIET RADIO IS NOW OPEN!")
 								.setDescription("COME AND LISTEN! (OR GO TO THE GULAG)");
-						message.channel.send(embed);
+						//message.channel.send(embed);
+					})
+					.catch(error => {
+						console.log(error);
 					});
 				message.delete();
 				break;
@@ -137,6 +140,10 @@ client.on("message", message => {
 		}
 	}
 })
+
+settings.debug && client.on("debug", data => {
+	console.log(data);
+});
 
 console.log("GulagBot v0.0.1");
 
