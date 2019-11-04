@@ -65,7 +65,13 @@ client.on("message", message => {
 					.then(connection => {
 						radioStream = connection;
 						console.log("Joined radio channel");
-						dispatcher = connection.playFile(settings.ussrAnthemPath);
+
+						if (settings.ussrAnthemPath.startsWith("http://") || settings.ussrAnthemPath.startsWith("https://")) {
+							dispatcher = connection.playArbitraryInput(settings.ussrAnthem);
+						} else {
+							dispatcher = connection.playFile(settings.ussrAnthemPath);
+						}
+
 						var embed = new Discord.RichEmbed()
 								.setTitle("SOVIET RADIO IS NOW OPEN!")
 								.setDescription("COME AND LISTEN! (OR GO TO THE GULAG)");
