@@ -2,6 +2,9 @@
 	(c) 2019 Henning Emil Bøjer Bach
 */
 
+//Require fs
+const fs = require('fs');
+
 //Require Discord.js
 const Discord = require('discord.js');
 
@@ -154,7 +157,21 @@ settings.debug && client.on("debug", data => {
 	console.log(data);
 });
 
-console.log("GulagBot v0.0.1");
+//Attempt to read git rev
+var sha;
+try {
+	const rev = fs.readFileSync('.git/HEAD').toString();
+	if (rev.indexOf(':') === -1) {
+		sha = rev;
+	} else {
+		sha = fs.readFileSync('.git/' + rev.substring(5).trim()).toString();
+	}
+	sha = sha.substring(0, 7) + "-git";
+} catch (e) {
+	sha = "";
+}
+
+console.log(`GulagBot v0.0.1 ${sha}`);
 
 client.login(settings.token);
 
