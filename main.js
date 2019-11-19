@@ -88,6 +88,7 @@ client.on("message", message => {
 					});
 				message.delete();
 				break;
+			case "!stop":
 			case "!quit":
 				//Stop playing
 				console.log(`Quit triggered by ${message.author.nickname || message.author.username}`);
