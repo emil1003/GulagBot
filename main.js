@@ -2,6 +2,9 @@
 	(c) 2019 Henning Emil Bøjer Bach
 */
 
+//Require process
+const process = require('process');
+
 //Require fs
 const fs = require('fs');
 
@@ -23,7 +26,7 @@ let gulagRole = null;
 let farmerRole = null;
 
 client.on("ready", () => {
-	console.log("Event: ready");
+	console.log(`Event: ready - at ${client.readyAt.toISOString()}`);
 
 	console.log(`I am ${client.user.tag}`);
 
@@ -155,6 +158,14 @@ client.on("message", message => {
 
 settings.debug && client.on("debug", data => {
 	console.log(data);
+});
+
+process.once('SIGINT', () => {
+	console.log("SIGINT: Disconnecting gracefully");
+	client.destroy()
+		.then(() => {
+			process.exit(0);
+		});
 });
 
 //Attempt to read git rev

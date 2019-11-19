@@ -6,7 +6,7 @@
   "scripts": {
     "test": "node -c main.js",
     "start": "nohup node main.js > log.txt 2>&1 & echo $! > pid.txt",
-    "stop": "kill $(tail pid.txt)"
+    "stop": "kill -2 $(tail pid.txt)"
   },
   "repository": {
     "type": "git",
